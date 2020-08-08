@@ -1,0 +1,6 @@
+
+gem5/tests/test-progs/asmtest/src/riscv/env/pm/link.ld
+
+gem5/tests/test-progs/asmtest/src/riscv/env/pt/link.ld
+
+gem5/tests/test-progs/asmtest/src/riscv/env/v/link.ld
