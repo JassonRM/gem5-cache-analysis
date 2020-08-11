@@ -1,4 +1,5 @@
 C:\Users\kenne\OneDrive\Desktop\Proyecto Final ARqui\gem5-analysis-with-parsec\PythonProject\ConfigManadgement\TestFiles\stats.txt%C:\Users\kenne\OneDrive\Desktop\Proyecto Final ARqui\gem5-analysis-with-parsec\PythonProject\ConfigManadgement\TestFiles\stats2.txt%C:\Users\kenne\OneDrive\Desktop\Proyecto Final ARqui\gem5-analysis-with-parsec\PythonProject\ConfigManadgement\TestFiles\stats3.txt
-param1
-122
-bench1%bench2%bench3
+param1%param3%param2
+122%125%126
+C1%C2%C3
+

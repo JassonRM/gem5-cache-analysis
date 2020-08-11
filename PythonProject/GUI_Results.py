@@ -8,6 +8,8 @@ from pandas import DataFrame
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+import copy
+
 
 def parse_document(filename):
     file1 = open(filename, 'r')
@@ -79,6 +81,7 @@ def array_str_to_int(str_list):
 
 class DataToGui:
     guiRoot = None
+    benchMarksCanvas = []
     benchMarksNames = []
     benchMarksParameters = []
     benchMarksParametersLines = []
@@ -94,28 +97,29 @@ class DataToGui:
         self.benchMarksGraphsNames = []
         self.benchMarksParametersValues = []
         self.benchMarksGraphs = []
+        self.benchCanvas = []
 
     def create_graph(self, data, names, var_name):
+        plot_canvas = Canvas(self.guiRoot, height=500, width=595)
         data1 = {'Benchmark': names,
                  var_name: data}
         df1 = DataFrame(data1, columns=['Benchmark', var_name])
         figure1 = plt.Figure(figsize=(6, len(names)), dpi=100)
         ax1 = figure1.add_subplot(111)
-        bar1 = FigureCanvasTkAgg(figure1, self.guiRoot)
-        bar1.get_tk_widget().place(height=400, width=400,x=0,y=0)
-        #bar1.get_tk_widget().pack(side=LEFT, fill=tk.BOTH)
-       #bar1.get_tk_widget().pack()
+        bar1 = FigureCanvasTkAgg(figure1, plot_canvas)
+        bar1.get_tk_widget().place(height=505, width=600, x=0, y=0)
         df1 = df1[['Benchmark', var_name]].groupby('Benchmark').sum()
         df1.plot(kind='bar', legend=True, ax=ax1)
         ax1.set_title("Benchmark Vs. " + var_name)
         self.benchMarksGraphs.append([ax1, df1, bar1])
+        self.benchCanvas.append([plot_canvas, var_name])
         return ax1
 
     def set_gui_root(self, root):
         self.guiRoot = root
 
     def set_benchmarks_names(self, names):
-        self.benchMarksParameters = names
+        self.benchMarksNames = names
 
     def set_benchmarks_param(self, params):
         self.benchMarksParameters = params
@@ -144,10 +148,17 @@ class DataToGui:
         length = len(self.benchMarksParameters)
         i = 0
         while i != length:
-            new_graph = self.create_graph(self.benchMarksParametersValues[i], ["lol", "lol2", "lol3"],
+            print(self.benchMarksNames)
+            new_graph = self.create_graph(self.benchMarksParametersValues[i], self.benchMarksNames,
                                           self.benchMarksParameters[i])
             self.benchMarksGraphs.append(new_graph)
             i += 1
+
+    def get_canvas_from_name(self, name):
+        for array in self.benchCanvas:
+            if array[1] == name:
+                return array[0]
+        return None
 
 
 graph_holder = DataToGui()
@@ -176,12 +187,89 @@ def print_gui_data():
 
 
 root = tk.Tk()
-root.geometry("400x400")
-canvas  = Canvas ( root, height = 400, width=400 )
-canvas.pack()
+root.geometry("1920x1080")
+canvas = Canvas(root, height=1080, width=1920, bg="white")
+canvas.place(x=0, y=-5)
 graph_holder.set_gui_root(canvas)
 config_graph_holder()
 
-print_gui_data()
+canvas_prev1 = None
+canvas_actual1 = None
+
+variable = tk.StringVar(canvas)
+variable.set("")
+opt = tk.OptionMenu(canvas, variable, *graph_holder.benchMarksParameters)
+opt.config(width=20, font=('Helvetica', 10))
+opt.place(x=10, y=100)
+
+
+def callback(*args):
+    print(variable.get())
+    global canvas_prev1
+    global graph_holder
+    global canvas_actual1
+    if canvas_actual1 is not None:
+        canvas_actual1.place(x=-1000, y=0)
+        canvas_prev1 = canvas_actual1
+        canvas_actual1 = copy.copy(graph_holder.get_canvas_from_name(variable.get()))
+        canvas_actual1.place(x=10, y=130)
+    else:
+        canvas_actual1 = copy.copy(graph_holder.get_canvas_from_name(variable.get()))
+        print(canvas_actual1)
+        canvas_actual1.place(x=10, y=130)
+
+
+variable.trace("w", callback)
+##############################______________________________________________________________________________________
+
+canvas_actual2 = None
+canvas_prev2 = None
+
+variable2 = tk.StringVar(canvas)
+variable2.set("")
+opt2 = tk.OptionMenu(canvas, variable2, *graph_holder.benchMarksParameters)
+opt2.config(width=20, font=('Helvetica', 10))
+opt2.place(x=650, y=100)
+
+
+def callback2(*args):
+    global canvas_prev2
+    global graph_holder
+    global canvas_actual2
+    if canvas_actual2 is not None:
+        canvas_actual2.place(x=-1000, y=0)
+        canvas_prev2 = canvas_actual2
+        canvas_actual2 = copy.copy(graph_holder.get_canvas_from_name(variable2.get()))
+        canvas_actual2.place(x=650, y=130)
+    else:
+        canvas_actual2 = copy.copy(graph_holder.get_canvas_from_name(variable2.get()))
+        canvas_actual2.place(x=650, y=130)
+variable2.trace("w", callback2)
+
+
+#_______________________________________________________________________________________________________
+canvas_actual3 = None
+canvas_prev3 = None
+
+variable3 = tk.StringVar(canvas)
+variable3.set("")
+opt3 = tk.OptionMenu(canvas, variable3, *graph_holder.benchMarksParameters)
+opt3.config(width=20, font=('Helvetica', 10))
+opt3.place(x=1300, y=100)
+
+
+def callback3(*args):
+    global canvas_prev3
+    global graph_holder
+    global canvas_actual3
+    if canvas_actual3 is not None:
+        canvas_actual3.place(x=-1000, y=0)
+        canvas_prev3 = canvas_actual2
+        canvas_actual3 = copy.copy(graph_holder.get_canvas_from_name(variable3.get()))
+        canvas_actual3.place(x=1300, y=130)
+    else:
+        canvas_actual3 = copy.copy(graph_holder.get_canvas_from_name(variable3.get()))
+        canvas_actual3.place(x=1300, y=130)
+variable3.trace("w", callback3)
 
 root.mainloop()
