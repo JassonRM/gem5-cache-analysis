@@ -1,11 +1,15 @@
 import enum
-import os
 
 
 class Benchmark(enum.Enum):
-    blackscholes = 1;
-    canneal = 2;
-    streamcluster = 3;
+    bzip2 = 1;
+    mcf = 2;
+    hmmer = 3;
+    sjeng = 4;
+    lbm = 5;
+    blackscholes = 6;
+    canneal = 7;
+    streamcluster = 8;
 
 
 class Size(enum.Enum):
@@ -15,6 +19,35 @@ class Size(enum.Enum):
     simmedium = 4;
     simlarge = 5;
     native = 6;
+
+def bzip2(benchmarks_folder):
+    binary = benchmarks_folder + "/401.bzip2/src/benchmark"
+    parameters = [benchmarks_folder + "/401.bzip2/data/input.program", 10]
+    return [binary] + parameters
+
+
+def mcf(benchmarks_folder):
+    binary = benchmarks_folder + "/429.mcf/src/benchmark"
+    parameters = [benchmarks_folder + "/429.mcf/data/inp.in"]
+    return [binary] + parameters
+
+
+def hmmer(benchmarks_folder):
+    binary = benchmarks_folder + "/456.hmmer/src/benchmark"
+    parameters = ['--fixed', 0, '--mean', 325, '--num', 45000, '--sd', 200, '--seed', 0, benchmarks_folder + '/456.hmmer/data/bombesin.hmm']
+    return [binary] + parameters
+
+
+def sjeng(benchmarks_folder):
+    binary = benchmarks_folder + "/458.sjeng/src/benchmark"
+    parameters = [benchmarks_folder + '/458.sjeng/data/test.txt']
+    return [binary] + parameters
+
+
+def lbm(benchmarks_folder):
+    binary = benchmarks_folder + "/470.lbm/src/benchmark"
+    parameters = [20, benchmarks_folder + '/470.lbm/data/reference.dat', 0, 1, benchmarks_folder + '/470.lbm/data/100_100_130_cf_a.of']
+    return [binary] + parameters
 
 
 def blackscholes(size, benchmarks_folder, threads):
@@ -67,6 +100,11 @@ def streamcluster(size, benchmarks_folder, threads):
 
 def benchmark_selector(benchmark, size, benchmarks_folder, threads):
     suite = {
+        Benchmark.bzip2: bzip2(benchmarks_folder),
+        Benchmark.mcf: mcf(benchmarks_folder),
+        Benchmark.hmmer: hmmer(benchmarks_folder),
+        Benchmark.sjeng: sjeng(benchmarks_folder),
+        Benchmark.lbm: lbm(benchmarks_folder),
         Benchmark.blackscholes: blackscholes(size, benchmarks_folder, threads),
         Benchmark.canneal: canneal(size, benchmarks_folder, threads),
         Benchmark.streamcluster: streamcluster(size, benchmarks_folder, threads)

@@ -92,7 +92,7 @@ isa = str(m5.defines.buildEnv['TARGET_ISA']).lower()
 
 benchmarks_path = "/mnt/a/gem5-analysis-with-parsec/benchmarks"
 threads = 1
-command = benchmark_selector(Benchmark.vips, Size.test, benchmarks_path, threads)
+command = benchmark_selector(Benchmark.lbm, Size.test, benchmarks_path, threads)
 
 # Create a process for a simple "Hello World" application
 process = Process()
