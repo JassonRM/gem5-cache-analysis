@@ -12,6 +12,7 @@ PrefetcherList = ["MultiPrefetcher", "QueuedPrefetcher", "StridePrefetcher", "Ta
                   "IndirectMemoryPrefetcher", "SignaturePathPrefetcher", "SignaturePathPrefetcherV2", "AMPMPrefetcher",
                   "DCPTPrefetcher", "IrregularStreamBufferPrefetcher", "SlimAMPMPrefetcher", "BOPPrefetcher",
                   "SBOOEprefetcher", "STeMSPrefetcher", "PIFPrefetcher"]
+BranchList = ["2bit_local_Predictor","Bi_mode_Predictor", "Tournament_predictor"]
 # -------------Configuraciones generales--------------------
 CLK = "1GHz"
 MEM_RANGE = "512MB"
@@ -22,6 +23,7 @@ BENCHMARK = "canneal"
 BENCH_SIZE = "test"
 THREADS = "1"
 PROCESSORS = "6"
+INSTRUCTIONS = "3"
 # ----------------------------------------------------------
 # -------------Configuraciones Caches-----------------------
 L1_INST_SIZE = "16kB"
@@ -44,6 +46,10 @@ L2_PREFETCH = "MultiPrefetcher"
 # ----------------------------------------------------------
 BRANCH_PREDICTOR = "NULL"
 PREV_BRANCH_PREDICTOR = "NULL"
+BTB_ENTRIES= ""
+LOCAL_PREDICTOR_SIZE = ""
+GLOBAL_PREDICTOR_SIZE = ""
+CHOICE_PREDICTOR_SIZE = ""
 
 
 # ----------------------------------------------------------
@@ -52,7 +58,7 @@ def consultaPathBENCH():
     global BENCH_PATH
     try:
         # root.filename = filedialog.askopenfilename(initialdir="/home", title="Seleccione el Benchmark",filetypes=(("txt", "*txt"),("all files", "*.*")))
-        root.filename = filedialog.askdirectory(initialdir="/home")
+        root.filename = filedialog.askdirectory(initialdir="/home", title="Seleccione la carpeta del Benchmark")
     except:
         messagebox.showwarning("Alto! No ha elegido una carpeta.")
 
@@ -63,7 +69,7 @@ def consultaPathGEM():
     global GEM_PATH
     try:
         # root.filename = filedialog.askopenfilename(initialdir="/home", title="Seleccione gem5",filetypes=(("txt", "*txt"), ("all files", "*.*")))
-        root.filename = filedialog.askdirectory(initialdir="/home")
+        root.filename = filedialog.askdirectory(initialdir="/home", title= "Seleccione la carpeta de instalacion de Gem5")
     except:
         messagebox.showwarning("Alto! No ha elegido una carpeta.")
     GEM_PATH = str(root.filename)
@@ -73,13 +79,13 @@ def consultaPy():
     global PY_PATH
     try:
         root.filename = filedialog.askopenfilename(initialdir="/home", title="Seleccione el .py",
-                                                   filetypes=(("txt", "*txt"), ("py", "*py"), ("all files", "*.*")))
+                                                   filetypes=(("py", "*py"), ("txt", "*txt"), ("all files", "*.*")))
     except:
         messagebox.showwarning("Alto! No ha elegido un un archivo.")
     PY_PATH = str(root.filename)
 
 
-def setConfigGenerales(clock, mem_range, benchOption, bench_size, threads, processors):
+def setConfigGenerales(clock, mem_range, benchOption, bench_size, threads, processors, instructions):
     global CLK, MEM_RANGE, BENCHMARK, BENCH_SIZE, THREADS, PROCESSORS
     CLK = clock
     MEM_RANGE = mem_range
@@ -105,6 +111,7 @@ def setConfigGenerales(clock, mem_range, benchOption, bench_size, threads, proce
     BENCH_SIZE = bench_size
     THREADS = threads
     PROCESSORS = processors
+    INSTRUCTIONS = instructions
 
     print("CLK " + CLK)
     print("MEM_RANGE " + MEM_RANGE)
@@ -115,6 +122,7 @@ def setConfigGenerales(clock, mem_range, benchOption, bench_size, threads, proce
     print("BENCH_SIZE " + BENCH_SIZE)
     print("THREADS " + THREADS)
     print("PROCESSORS " + PROCESSORS)
+    print("INSTRUCTIONS "+ INSTRUCTIONS)
     table()
     ventanaConfig.destroy()
 
@@ -126,7 +134,7 @@ def ventanaConfiguracionesGenrales():
     global ventanaConfig
     ventanaConfig = Toplevel(root)
     ventanaConfig.title("Configuraciones del Sistema")
-    ventanaConfig.geometry("400x440")
+    ventanaConfig.geometry("400x480")
     etiquetaExplicativa = Label(ventanaConfig, text="Ingrese las configuraciones generales del sistema:").place(x=10,
                                                                                                                 y=10)
     try:
@@ -165,6 +173,10 @@ def ventanaConfiguracionesGenrales():
         PROCESSORSetiqueta = Label(ventanaConfig, text="Cantidad de procesadores:").place(x=10, y=360)
         PROCESSORScaja = Entry(ventanaConfig, textvariable=processors).place(x=185, y=360)
 
+        instructions = StringVar(ventanaConfig, value=INSTRUCTIONS)
+        INSTRetiqueta = Label(ventanaConfig, text="Cantidad de instrucciones:").place(x=10,y=400)
+        INSTRcaja = Entry(ventanaConfig, textvariable=instructions).place(x=185,y=400)
+
 
     except ValueError:
         messagebox.showwarning("Cuidado", "No puede dejar valores en blanco")
@@ -172,7 +184,7 @@ def ventanaConfiguracionesGenrales():
     botonObtieneRuta = Button(ventanaConfig, text="Guardar",
                               command=lambda: setConfigGenerales(clock.get(), mem_range.get(), var.get(),
                                                                  bench_size.get(), threads.get(),
-                                                                 processors.get())).place(x=10, y=400)
+                                                                 processors.get(), instructions.get())).place(x=10, y=440)
 
 
 def setConfigurarcionL1(l1_inst_size, l1_dat_size, l1_assoc, l1_tag_latency, l1_data_latency, l1_resp_lat, l1_repl_pol,
@@ -450,6 +462,54 @@ def configuracionCacheL2():
                           command=lambda: setConfigurarcionL2(l2_size.get(), l2_assoc.get(), l2_tag_latency.get(),
                                                               l2_data_latency.get(), l2_resp_lat.get(), var.get(),
                                                               var1.get())).place(x=10, y=320)
+def setBranchPredictor(tipo, btbentries,localPsize, globalPsize,choicePsize):
+    global BRANCH_PREDICTOR, PREV_BRANCH_PREDICTOR,BTB_ENTRIES,LOCAL_PREDICTOR_SIZE,GLOBAL_PREDICTOR_SIZE,CHOICE_PREDICTOR_SIZE
+
+    BRANCH_PREDICTOR = tipo
+    PREV_BRANCH_PREDICTOR = "NULL"
+    BTB_ENTRIES = btbentries
+    LOCAL_PREDICTOR_SIZE = localPsize
+    GLOBAL_PREDICTOR_SIZE = globalPsize
+    CHOICE_PREDICTOR_SIZE = choicePsize
+
+    table()
+    ventanBranchpredictor.destroy()
+
+ventanBranchpredictor = None
+def branchPredictor():
+    global ventanBranchpredictor
+    ventanBranchpredictor = Toplevel(root)
+    ventanBranchpredictor.title("Configuraciones del Branch Predictor")
+    ventanBranchpredictor.geometry("400x280")
+    Branch = Label (ventanBranchpredictor,text="Ingrese la configuracion del Branch Predictor").place(x=10,y=10)
+
+    try:
+
+        BRANCHetiqueta = Label(ventanBranchpredictor, text="Tipo de branch predictor:").place(x=10, y=40)
+        var = StringVar(ventanBranchpredictor)
+        var.set(BranchList[0])
+        BRANCHoption = OptionMenu(ventanBranchpredictor, var, *BranchList).place(x=200, y=40)
+
+        btbentries = StringVar(ventanBranchpredictor, value=BTB_ENTRIES)
+        BTBentryetiqueta = Label(ventanBranchpredictor, text="Numero de BTBentries:").place(x=10,y=80)
+        BTBcaja = Entry(ventanBranchpredictor, textvariable=btbentries).place(x=200, y =80)
+
+        localPsize = StringVar(ventanBranchpredictor, value=LOCAL_PREDICTOR_SIZE)
+        LOCALetiqueta = Label(ventanBranchpredictor, text="Tamano de Local Predictor:").place(x=10,y=120)
+        LOCALcaja = Entry(ventanBranchpredictor, text=localPsize).place(x=200,y=120)
+
+        globalPsize = StringVar(ventanBranchpredictor, value=GLOBAL_PREDICTOR_SIZE)
+        GLOBALetiqueta = Label(ventanBranchpredictor, text="Tamano de Global Predictor:").place(x=10,y=160)
+        GLOBALcaja = Entry(ventanBranchpredictor, text=globalPsize).place(x=200,y=160)
+
+        choicePsize = StringVar(ventanBranchpredictor, value=CHOICE_PREDICTOR_SIZE)
+        CHOICEetiqueta = Label(ventanBranchpredictor, text="Tamano de Choice Predictor:").place(x=10,y=200)
+        CHOICEcaja = Entry(ventanBranchpredictor, text=choicePsize).place(x=200,y=200)
+    except ValueError:
+        messagebox.showwarning("Cuidado", "No puede dejar valores en blanco")
+
+    botonBranch = Button(ventanBranchpredictor, text="Confirmar", command = lambda: setBranchPredictor(var.get(), btbentries.get(), localPsize.get(), globalPsize.get(), choicePsize.get())).place(x=10, y =240)
+
 
 
 def simular():
@@ -495,9 +555,10 @@ def table():
     etiqueta = Label(root, text="BENCH_PATH:   " + BENCH_PATH).place(x=10, y=230)
     etiqueta = Label(root, text="GEM_PATH:     " + GEM_PATH).place(x=10, y=250)
     etiqueta = Label(root, text="PY_PATH:      " + PY_PATH).place(x=10, y=270)
-    etiqueta = Label(root, text="BENCHMARK:    " + BENCHMARK).place(x=10, y=290)  ## Cambiar las y a partir de aca
+    etiqueta = Label(root, text="BENCHMARK:    " + BENCHMARK).place(x=10, y=290)
     etiqueta = Label(root, text="BENCH_SIZE:   " + BENCH_SIZE).place(x=10, y=310)
     etiqueta = Label(root, text="PROCESSORS:   " + PROCESSORS).place(x=10, y=330)
+    etiqueta = Label(root, text="INSTRUCTIONS  " + INSTRUCTIONS).place(x=10,y=350) # a partir de aca cambiar y
     etiqueta = Label(root, text="L1_INST_SIZE: " + L1_INST_SIZE).place(x=10, y=350)
     etiqueta = Label(root, text="L1_DAT_SIZE:  " + L1_DAT_SIZE).place(x=10, y=370)
     etiqueta = Label(root, text="L1_ASSOC:     " + L1_ASSOC).place(x=10, y=390)
@@ -512,13 +573,7 @@ def table():
     etiqueta = Label(root, text="L2_RESP_LAT:  " + L2_RESP_LAT).place(x=10, y=570)
     etiqueta = Label(root, text="L2_REPL_POL:  " + L2_REPL_POL).place(x=10, y=590)
     etiqueta = Label(root, text="L2_PREFETCH:  " + L2_PREFETCH).place(x=10, y=610)
-
-
-def branchPredictor():
-    ventanBranchpredictor = Toplevel(root)
-    ventanBranchpredictor.title("Configuraciones de la Cahce L2")
-    ventanBranchpredictor.geometry("400x400")
-
+    etiqueta = Label(root, text="BRANCH_PREDICTOR:" + BRANCH_PREDICTOR).place(x=10,y=630)
 
 def editCaches():
     caches = open("../caches.py", "r+")
@@ -569,6 +624,6 @@ botonL1 = Button(root, text="Configuracion de Cache L1", command=configuracionCa
 botonL2 = Button(root, text="Configuracion de Cache L2", command=configuracionCacheL2).place(x=400, y=90)
 etiquetaMostrarInfo = Label(root, text="Informacion de la configuracion:").place(x=10, y=150)
 botonMostrarInfo = Button(root, text="Mostrar informacion", command=table).place(x=250, y=150)
-botonRun = Button(root, text="Simular", command=simular).place(x=10, y=640)
+botonRun = Button(root, text="Simular", command=simular).place(x=10, y=660)
 table()
 root.mainloop()
