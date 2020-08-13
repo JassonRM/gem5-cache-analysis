@@ -3,6 +3,11 @@ from m5.params import *
 from m5.objects.ReplacementPolicies import *
 from m5.objects.Prefetcher import *
 
+L1_REPLACEMENT_POLICY = FIFORP()
+L1_PREFETCHER = MultiPrefetcher()
+L2_REPLACEMENT_POLICY = FIFORP()
+L2_PREFETCHER = MultiPrefetcher()
+
 
 class L1Cache(Cache):
     assoc = 2
@@ -11,9 +16,9 @@ class L1Cache(Cache):
     response_latency = 2
     mshrs = 4
     tgts_per_mshr = 20
-    replacement_policy = Param.BaseReplacementPolicy(FIFORP(), "Replacement policy")
-    prefetcher = Param.BasePrefetcher(MultiPrefetcher(),"Prefetcher attached to cache")
 
+    replacement_policy = Param.BaseReplacementPolicy(L1_REPLACEMENT_POLICY, "Replacement policy")
+    prefetcher = Param.BasePrefetcher(L1_PREFETCHER, "Prefetcher attached to cache")
 
     def __init__(self, assoc, tag_latency, data_latency, response_latency):
         self.assoc = assoc
@@ -61,6 +66,9 @@ class L2Cache(Cache):
     mshrs = 20
     tgts_per_mshr = 12
 
+    replacement_policy = Param.BaseReplacementPolicy(L2_REPLACEMENT_POLICY, "Replacement policy")
+    prefetcher = Param.BasePrefetcher(L2_PREFETCHER, "Prefetcher attached to cache")
+
     def __init__(self, assoc, tag_latency, data_latency, response_latency, size):
         self.assoc = assoc
         self.tag_latency = tag_latency
@@ -74,3 +82,7 @@ class L2Cache(Cache):
 
     def connectMemSideBus(self, bus):
         self.mem_side = bus.slave
+
+
+
+
