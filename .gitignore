@@ -10,3 +10,4 @@ __pycache__/
 benchmarks/blackscholes/inputs/input_native.txt
 
 benchmarks/canneal/inputs/input_native.nets
+*.xml

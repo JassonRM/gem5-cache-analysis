@@ -3,7 +3,9 @@ from tkinter import filedialog
 from tkinter import messagebox
 import os
 import re
-
+import threading
+import time
+from GUI_Results import init_interface
 # Variables globales
 BenchList = ['bzip2', 'mcf', 'hmmer', 'sjeng', 'lbm', 'blackscholes', 'canneal', 'streamcluster']
 ReplacementList = ["FIFORP", "SecondChanceRP", "LFURP", "LRURP", "BIPRP", "LIPRP", "MRURP",
@@ -609,6 +611,11 @@ def editCPU():
     print(cmd)
     os.system(cmd)
 
+def execute_result_interface():
+    x = threading.Thread(target=init_interface, args=())
+    x.start()
+
+
 
 # Configuracion general para la ventana principal.
 root = Tk()
@@ -626,4 +633,5 @@ etiquetaMostrarInfo = Label(root, text="Informacion de la configuracion:").place
 botonMostrarInfo = Button(root, text="Mostrar informacion", command=table).place(x=250, y=150)
 botonRun = Button(root, text="Simular", command=simular).place(x=10, y=660)
 table()
+execute_result_interface()
 root.mainloop()

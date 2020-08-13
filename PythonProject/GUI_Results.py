@@ -161,7 +161,6 @@ class DataToGui:
         return None
 
 
-graph_holder = DataToGui()
 
 
 def config_graph_holder():
@@ -186,21 +185,12 @@ def print_gui_data():
     print(graph_holder.benchMarksGraphs)
 
 
-root = tk.Tk()
-root.geometry("1920x1080")
-canvas = Canvas(root, height=1080, width=1920, bg="white")
-canvas.place(x=0, y=-5)
-graph_holder.set_gui_root(canvas)
-config_graph_holder()
+root = None
 
 canvas_prev1 = None
 canvas_actual1 = None
 
-variable = tk.StringVar(canvas)
-variable.set("")
-opt = tk.OptionMenu(canvas, variable, *graph_holder.benchMarksParameters)
-opt.config(width=20, font=('Helvetica', 10))
-opt.place(x=10, y=100)
+variable = None
 
 
 def callback(*args):
@@ -219,17 +209,13 @@ def callback(*args):
         canvas_actual1.place(x=10, y=130)
 
 
-variable.trace("w", callback)
+
 ##############################______________________________________________________________________________________
 
 canvas_actual2 = None
 canvas_prev2 = None
 
-variable2 = tk.StringVar(canvas)
-variable2.set("")
-opt2 = tk.OptionMenu(canvas, variable2, *graph_holder.benchMarksParameters)
-opt2.config(width=20, font=('Helvetica', 10))
-opt2.place(x=650, y=100)
+variable2 = None
 
 
 def callback2(*args):
@@ -244,18 +230,13 @@ def callback2(*args):
     else:
         canvas_actual2 = copy.copy(graph_holder.get_canvas_from_name(variable2.get()))
         canvas_actual2.place(x=650, y=130)
-variable2.trace("w", callback2)
 
 
 #_______________________________________________________________________________________________________
 canvas_actual3 = None
 canvas_prev3 = None
 
-variable3 = tk.StringVar(canvas)
-variable3.set("")
-opt3 = tk.OptionMenu(canvas, variable3, *graph_holder.benchMarksParameters)
-opt3.config(width=20, font=('Helvetica', 10))
-opt3.place(x=1300, y=100)
+variable3 = None
 
 
 def callback3(*args):
@@ -270,6 +251,43 @@ def callback3(*args):
     else:
         canvas_actual3 = copy.copy(graph_holder.get_canvas_from_name(variable3.get()))
         canvas_actual3.place(x=1300, y=130)
-variable3.trace("w", callback3)
 
-root.mainloop()
+
+
+def init_interface():
+    global graph_holder
+    global root
+    global variable3
+    global variable
+    global variable2
+    graph_holder = None
+    graph_holder = DataToGui()
+    root = tk.Tk()
+    root.geometry("1920x1080")
+    canvas = Canvas(root, height=1080, width=1920, bg="white")
+    canvas.place(x=0, y=-5)
+    graph_holder.set_gui_root(canvas)
+    config_graph_holder()
+    variable = tk.StringVar(canvas)
+    variable.set("")
+    opt = tk.OptionMenu(canvas, variable, *graph_holder.benchMarksParameters)
+    opt.config(width=20, font=('Helvetica', 10))
+    opt.place(x=10, y=100)
+    variable.trace("w", callback)
+    variable2 = tk.StringVar(canvas)
+    variable2.set("")
+    opt2 = tk.OptionMenu(canvas, variable2, *graph_holder.benchMarksParameters)
+    opt2.config(width=20, font=('Helvetica', 10))
+    opt2.place(x=650, y=100)
+    variable2.trace("w", callback2)
+    variable3 = tk.StringVar(canvas)
+    variable3.set("")
+    opt3 = tk.OptionMenu(canvas, variable3, *graph_holder.benchMarksParameters)
+    opt3.config(width=20, font=('Helvetica', 10))
+    opt3.place(x=1300, y=100)
+    variable3.trace("w", callback3)
+    root.mainloop()
+
+
+
+
