@@ -4,9 +4,9 @@ from m5.objects.ReplacementPolicies import *
 from m5.objects.Prefetcher import *
 
 L1_REPLACEMENT_POLICY = FIFORP()
-L1_PREFETCHER = MultiPrefetcher()
+L1_PREFETCHER = NULL
 L2_REPLACEMENT_POLICY = FIFORP()
-L2_PREFETCHER = MultiPrefetcher()
+L2_PREFETCHER = NULL
 
 
 class L1Cache(Cache):
@@ -82,7 +82,3 @@ class L2Cache(Cache):
 
     def connectMemSideBus(self, bus):
         self.mem_side = bus.slave
-
-
-
-

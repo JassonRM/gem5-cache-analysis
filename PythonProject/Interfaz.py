@@ -6,15 +6,16 @@ import re
 import threading
 import time
 from GUI_Results import init_interface
+
 # Variables globales
 BenchList = ['bzip2', 'mcf', 'hmmer', 'sjeng', 'lbm', 'blackscholes', 'canneal', 'streamcluster']
-ReplacementList = ["FIFORP", "SecondChanceRP", "LFURP", "LRURP", "BIPRP", "LIPRP", "MRURP",
+ReplacementList = ["LRURP", "FIFORP", "SecondChanceRP", "LFURP", "BIPRP", "LIPRP", "MRURP",
                    "RandomRP", "BRRIPRP", "RRIPRP", "NRURP", "TreePLRURP", "WeightedLRURP"]
-PrefetcherList = ["MultiPrefetcher", "QueuedPrefetcher", "StridePrefetcher", "TaggedPrefethcer",
+PrefetcherList = ["NULL", "MultiPrefetcher", "QueuedPrefetcher", "StridePrefetcher", "TaggedPrefethcer",
                   "IndirectMemoryPrefetcher", "SignaturePathPrefetcher", "SignaturePathPrefetcherV2", "AMPMPrefetcher",
                   "DCPTPrefetcher", "IrregularStreamBufferPrefetcher", "SlimAMPMPrefetcher", "BOPPrefetcher",
                   "SBOOEprefetcher", "STeMSPrefetcher", "PIFPrefetcher"]
-BranchList = ["2bit_local_Predictor","Bi_mode_Predictor", "Tournament_predictor"]
+BranchList = ["2bit_local_Predictor", "Bi_mode_Predictor", "Tournament_predictor"]
 # -------------Configuraciones generales--------------------
 CLK = "1GHz"
 MEM_RANGE = "512MB"
@@ -25,7 +26,7 @@ BENCHMARK = "canneal"
 BENCH_SIZE = "test"
 THREADS = "1"
 PROCESSORS = "6"
-INSTRUCTIONS = "3"
+INSTRUCTIONS = "10000"
 # ----------------------------------------------------------
 # -------------Configuraciones Caches-----------------------
 L1_INST_SIZE = "16kB"
@@ -35,7 +36,7 @@ L1_TAG_LAT = "2"
 L1_DAT_LAT = "2"
 L1_RESP_LAT = "2"
 L1_REPL_POL = "FIFORP"
-L1_PREFETCH = "MultiPrefetcher"
+L1_PREFETCH = "NULL"
 # ----------------------------------------------------------
 L2_SIZE = "256kB"
 L2_ASSOC = "8"
@@ -43,12 +44,12 @@ L2_TAG_LAT = "20"
 L2_DAT_LAT = "20"
 L2_RESP_LAT = "20"
 L2_REPL_POL = "FIFORP"
-L2_PREFETCH = "MultiPrefetcher"
+L2_PREFETCH = "NULL"
 
 # ----------------------------------------------------------
 BRANCH_PREDICTOR = "NULL"
 PREV_BRANCH_PREDICTOR = "NULL"
-BTB_ENTRIES= ""
+BTB_ENTRIES = ""
 LOCAL_PREDICTOR_SIZE = ""
 GLOBAL_PREDICTOR_SIZE = ""
 CHOICE_PREDICTOR_SIZE = ""
@@ -71,7 +72,8 @@ def consultaPathGEM():
     global GEM_PATH
     try:
         # root.filename = filedialog.askopenfilename(initialdir="/home", title="Seleccione gem5",filetypes=(("txt", "*txt"), ("all files", "*.*")))
-        root.filename = filedialog.askdirectory(initialdir="/home", title= "Seleccione la carpeta de instalacion de Gem5")
+        root.filename = filedialog.askdirectory(initialdir="/home",
+                                                title="Seleccione la carpeta de instalacion de Gem5")
     except:
         messagebox.showwarning("Alto! No ha elegido una carpeta.")
     GEM_PATH = str(root.filename)
@@ -124,7 +126,7 @@ def setConfigGenerales(clock, mem_range, benchOption, bench_size, threads, proce
     print("BENCH_SIZE " + BENCH_SIZE)
     print("THREADS " + THREADS)
     print("PROCESSORS " + PROCESSORS)
-    print("INSTRUCTIONS "+ INSTRUCTIONS)
+    print("INSTRUCTIONS " + INSTRUCTIONS)
     table()
     ventanaConfig.destroy()
 
@@ -176,8 +178,8 @@ def ventanaConfiguracionesGenrales():
         PROCESSORScaja = Entry(ventanaConfig, textvariable=processors).place(x=185, y=360)
 
         instructions = StringVar(ventanaConfig, value=INSTRUCTIONS)
-        INSTRetiqueta = Label(ventanaConfig, text="Cantidad de instrucciones:").place(x=10,y=400)
-        INSTRcaja = Entry(ventanaConfig, textvariable=instructions).place(x=185,y=400)
+        INSTRetiqueta = Label(ventanaConfig, text="Cantidad de instrucciones:").place(x=10, y=400)
+        INSTRcaja = Entry(ventanaConfig, textvariable=instructions).place(x=185, y=400)
 
 
     except ValueError:
@@ -186,7 +188,8 @@ def ventanaConfiguracionesGenrales():
     botonObtieneRuta = Button(ventanaConfig, text="Guardar",
                               command=lambda: setConfigGenerales(clock.get(), mem_range.get(), var.get(),
                                                                  bench_size.get(), threads.get(),
-                                                                 processors.get(), instructions.get())).place(x=10, y=440)
+                                                                 processors.get(), instructions.get())).place(x=10,
+                                                                                                              y=440)
 
 
 def setConfigurarcionL1(l1_inst_size, l1_dat_size, l1_assoc, l1_tag_latency, l1_data_latency, l1_resp_lat, l1_repl_pol,
@@ -464,8 +467,10 @@ def configuracionCacheL2():
                           command=lambda: setConfigurarcionL2(l2_size.get(), l2_assoc.get(), l2_tag_latency.get(),
                                                               l2_data_latency.get(), l2_resp_lat.get(), var.get(),
                                                               var1.get())).place(x=10, y=320)
-def setBranchPredictor(tipo, btbentries,localPsize, globalPsize,choicePsize):
-    global BRANCH_PREDICTOR, PREV_BRANCH_PREDICTOR,BTB_ENTRIES,LOCAL_PREDICTOR_SIZE,GLOBAL_PREDICTOR_SIZE,CHOICE_PREDICTOR_SIZE
+
+
+def setBranchPredictor(tipo, btbentries, localPsize, globalPsize, choicePsize):
+    global BRANCH_PREDICTOR, PREV_BRANCH_PREDICTOR, BTB_ENTRIES, LOCAL_PREDICTOR_SIZE, GLOBAL_PREDICTOR_SIZE, CHOICE_PREDICTOR_SIZE
 
     BRANCH_PREDICTOR = tipo
     PREV_BRANCH_PREDICTOR = "NULL"
@@ -477,13 +482,16 @@ def setBranchPredictor(tipo, btbentries,localPsize, globalPsize,choicePsize):
     table()
     ventanBranchpredictor.destroy()
 
+
 ventanBranchpredictor = None
+
+
 def branchPredictor():
     global ventanBranchpredictor
     ventanBranchpredictor = Toplevel(root)
     ventanBranchpredictor.title("Configuraciones del Branch Predictor")
     ventanBranchpredictor.geometry("400x280")
-    Branch = Label (ventanBranchpredictor,text="Ingrese la configuracion del Branch Predictor").place(x=10,y=10)
+    Branch = Label(ventanBranchpredictor, text="Ingrese la configuracion del Branch Predictor").place(x=10, y=10)
 
     try:
 
@@ -493,25 +501,26 @@ def branchPredictor():
         BRANCHoption = OptionMenu(ventanBranchpredictor, var, *BranchList).place(x=200, y=40)
 
         btbentries = StringVar(ventanBranchpredictor, value=BTB_ENTRIES)
-        BTBentryetiqueta = Label(ventanBranchpredictor, text="Numero de BTBentries:").place(x=10,y=80)
-        BTBcaja = Entry(ventanBranchpredictor, textvariable=btbentries).place(x=200, y =80)
+        BTBentryetiqueta = Label(ventanBranchpredictor, text="Numero de BTBentries:").place(x=10, y=80)
+        BTBcaja = Entry(ventanBranchpredictor, textvariable=btbentries).place(x=200, y=80)
 
         localPsize = StringVar(ventanBranchpredictor, value=LOCAL_PREDICTOR_SIZE)
-        LOCALetiqueta = Label(ventanBranchpredictor, text="Tamano de Local Predictor:").place(x=10,y=120)
-        LOCALcaja = Entry(ventanBranchpredictor, text=localPsize).place(x=200,y=120)
+        LOCALetiqueta = Label(ventanBranchpredictor, text="Tamano de Local Predictor:").place(x=10, y=120)
+        LOCALcaja = Entry(ventanBranchpredictor, text=localPsize).place(x=200, y=120)
 
         globalPsize = StringVar(ventanBranchpredictor, value=GLOBAL_PREDICTOR_SIZE)
-        GLOBALetiqueta = Label(ventanBranchpredictor, text="Tamano de Global Predictor:").place(x=10,y=160)
-        GLOBALcaja = Entry(ventanBranchpredictor, text=globalPsize).place(x=200,y=160)
+        GLOBALetiqueta = Label(ventanBranchpredictor, text="Tamano de Global Predictor:").place(x=10, y=160)
+        GLOBALcaja = Entry(ventanBranchpredictor, text=globalPsize).place(x=200, y=160)
 
         choicePsize = StringVar(ventanBranchpredictor, value=CHOICE_PREDICTOR_SIZE)
-        CHOICEetiqueta = Label(ventanBranchpredictor, text="Tamano de Choice Predictor:").place(x=10,y=200)
-        CHOICEcaja = Entry(ventanBranchpredictor, text=choicePsize).place(x=200,y=200)
+        CHOICEetiqueta = Label(ventanBranchpredictor, text="Tamano de Choice Predictor:").place(x=10, y=200)
+        CHOICEcaja = Entry(ventanBranchpredictor, text=choicePsize).place(x=200, y=200)
     except ValueError:
         messagebox.showwarning("Cuidado", "No puede dejar valores en blanco")
 
-    botonBranch = Button(ventanBranchpredictor, text="Confirmar", command = lambda: setBranchPredictor(var.get(), btbentries.get(), localPsize.get(), globalPsize.get(), choicePsize.get())).place(x=10, y =240)
-
+    botonBranch = Button(ventanBranchpredictor, text="Confirmar",
+                         command=lambda: setBranchPredictor(var.get(), btbentries.get(), localPsize.get(),
+                                                            globalPsize.get(), choicePsize.get())).place(x=10, y=240)
 
 
 def simular():
@@ -560,7 +569,7 @@ def table():
     etiqueta = Label(root, text="BENCHMARK:    " + BENCHMARK).place(x=10, y=290)
     etiqueta = Label(root, text="BENCH_SIZE:   " + BENCH_SIZE).place(x=10, y=310)
     etiqueta = Label(root, text="PROCESSORS:   " + PROCESSORS).place(x=10, y=330)
-    etiqueta = Label(root, text="INSTRUCTIONS  " + INSTRUCTIONS).place(x=10,y=350) # a partir de aca cambiar y
+    etiqueta = Label(root, text="INSTRUCTIONS  " + INSTRUCTIONS).place(x=10, y=350)  # a partir de aca cambiar y
     etiqueta = Label(root, text="L1_INST_SIZE: " + L1_INST_SIZE).place(x=10, y=350)
     etiqueta = Label(root, text="L1_DAT_SIZE:  " + L1_DAT_SIZE).place(x=10, y=370)
     etiqueta = Label(root, text="L1_ASSOC:     " + L1_ASSOC).place(x=10, y=390)
@@ -575,15 +584,22 @@ def table():
     etiqueta = Label(root, text="L2_RESP_LAT:  " + L2_RESP_LAT).place(x=10, y=570)
     etiqueta = Label(root, text="L2_REPL_POL:  " + L2_REPL_POL).place(x=10, y=590)
     etiqueta = Label(root, text="L2_PREFETCH:  " + L2_PREFETCH).place(x=10, y=610)
-    etiqueta = Label(root, text="BRANCH_PREDICTOR:" + BRANCH_PREDICTOR).place(x=10,y=630)
+    etiqueta = Label(root, text="BRANCH_PREDICTOR:" + BRANCH_PREDICTOR).place(x=10, y=630)
+
 
 def editCaches():
     caches = open("../caches.py", "r+")
     data = caches.read()
     data = re.sub("L1_REPLACEMENT_POLICY = .+\n", "L1_REPLACEMENT_POLICY = " + L1_REPL_POL + "()\n", data)
-    data = re.sub("L1_PREFETCHER = .+\n", "L1_PREFETCHER = " + L1_PREFETCH + "()\n", data)
+    if L1_PREFETCH == "NULL":
+        data = re.sub("L1_PREFETCHER = .+\n", "L1_PREFETCHER = " + L1_PREFETCH + "\n", data)
+    else:
+        data = re.sub("L1_PREFETCHER = .+\n", "L1_PREFETCHER = " + L1_PREFETCH + "()\n", data)
     data = re.sub("L2_REPLACEMENT_POLICY = .+\n", "L2_REPLACEMENT_POLICY = " + L2_REPL_POL + "()\n", data)
-    data = re.sub("L2_PREFETCHER = .+\n", "L2_PREFETCHER = " + L2_PREFETCH + "()\n", data)
+    if L2_PREFETCH == "NULL":
+        data = re.sub("L2_PREFETCHER = .+\n", "L2_PREFETCHER = " + L2_PREFETCH + "\n", data)
+    else:
+        data = re.sub("L2_PREFETCHER = .+\n", "L2_PREFETCHER = " + L2_PREFETCH + "()\n", data)
     caches.seek(0)
     caches.write(data)
     caches.close()
@@ -611,10 +627,10 @@ def editCPU():
     print(cmd)
     os.system(cmd)
 
+
 def execute_result_interface():
     x = threading.Thread(target=init_interface, args=())
     x.start()
-
 
 
 # Configuracion general para la ventana principal.

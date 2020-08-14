@@ -4,7 +4,6 @@ from benchmark_selector import *
 from caches import *
 import argparse
 
-
 # Construct the argument parser
 ap = argparse.ArgumentParser(prefix_chars='-')
 # Add the arguments to the parser
