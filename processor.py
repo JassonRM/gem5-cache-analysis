@@ -32,6 +32,8 @@ ap.add_argument("-l2_repl_pol", "--l2_repl_pol", required=False)
 ap.add_argument("-l2_prefetch", "--l2_prefetch", required=False)
 ap.add_argument("-l2_size", "--l2_size", required=False)
 
+ap.add_argument("-I", "--instructions", required=False)
+
 args = vars(ap.parse_args())
 
 # processor.py -clk=1GHz -mem_range=512MB -bench_path=/home/marco/Documents/Projects/gem5-analysis-with-parsec/benchmarks -benchmark=canneal -bench_size=test -threads=1 -l1_assoc=2 -l1_tag_lat=2 -l1_dat_lat=2 -l1_resp_lat=2 -l1_inst_size=16kB -l1_dat_size=64kB -l2_assoc=8 -l2_tag_lat=20 -l2_dat_lat=20 -l2_resp_lat=20 -l2_size=256kB
@@ -43,6 +45,7 @@ BENCHMARKS_PATH = args["bench_path"]
 BENCHMARK = Benchmark[args["benchmark"]]
 BENCHMARK_SIZE = Size[args["bench_size"]]
 THREADS = int(args["threads"])
+INSTRUCTIONS = int(args["instructions"])
 
 # Create system
 system = System()
@@ -60,7 +63,7 @@ system.mem_ranges = [AddrRange(MEM_RANGE)]
 
 # Create CPU
 system.cpu = AtomicSimpleCPU()
-
+system.cpu.max_insts_any_thread = INSTRUCTIONS
 # Create Caches
 system.cpu.icache = L1ICache(args["l1_assoc"], args["l1_tag_lat"], args["l1_dat_lat"], args["l1_resp_lat"],
                              args["l1_inst_size"])

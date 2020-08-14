@@ -15,7 +15,7 @@ PrefetcherList = ["NULL", "MultiPrefetcher", "QueuedPrefetcher", "StridePrefetch
                   "IndirectMemoryPrefetcher", "SignaturePathPrefetcher", "SignaturePathPrefetcherV2", "AMPMPrefetcher",
                   "DCPTPrefetcher", "IrregularStreamBufferPrefetcher", "SlimAMPMPrefetcher", "BOPPrefetcher",
                   "SBOOEprefetcher", "STeMSPrefetcher", "PIFPrefetcher"]
-BranchList = ["2bit_local_Predictor", "Bi_mode_Predictor", "Tournament_predictor"]
+BranchList = ["NULL", "LocalBP", "BiModeBP", "TournamentBP"]
 # -------------Configuraciones generales--------------------
 CLK = "1GHz"
 MEM_RANGE = "512MB"
@@ -26,7 +26,7 @@ BENCHMARK = "canneal"
 BENCH_SIZE = "test"
 THREADS = "1"
 PROCESSORS = "6"
-INSTRUCTIONS = "10000"
+INSTRUCTIONS = "100000"
 # ----------------------------------------------------------
 # -------------Configuraciones Caches-----------------------
 L1_INST_SIZE = "16kB"
@@ -90,7 +90,7 @@ def consultaPy():
 
 
 def setConfigGenerales(clock, mem_range, benchOption, bench_size, threads, processors, instructions):
-    global CLK, MEM_RANGE, BENCHMARK, BENCH_SIZE, THREADS, PROCESSORS
+    global CLK, MEM_RANGE, BENCHMARK, BENCH_SIZE, THREADS, PROCESSORS, INSTRUCTIONS
     CLK = clock
     MEM_RANGE = mem_range
     BENCHMARK = benchOption
@@ -556,7 +556,8 @@ def simular():
     print(BENCH_PATH)
 
     editCPU()
-    comando = GEM_PATH + "/build/X86/gem5.opt " + PY_PATH + " -clk=" + CLK + " -mem_range=" + MEM_RANGE + " -bench_path=" + BENCH_PATH + " -benchmark=" + BENCHMARK + " -bench_size=" + BENCH_SIZE + " -threads=" + THREADS + " -l1_inst_size=" + L1_INST_SIZE + " -l1_dat_size=" + L1_DAT_SIZE + " -l1_assoc=" + L1_ASSOC + " -l1_tag_lat=" + L1_TAG_LAT + " -l1_dat_lat=" + L1_DAT_LAT + " -l1_resp_lat=" + L1_RESP_LAT + " -l2_size=" + L2_SIZE + " -l2_assoc=" + L2_ASSOC + " -l2_tag_lat=" + L2_TAG_LAT + " -l2_dat_lat=" + L2_DAT_LAT + " -l2_resp_lat=" + L2_RESP_LAT
+    print(INSTRUCTIONS)
+    comando = GEM_PATH + "/build/X86/gem5.opt " + PY_PATH + " -I " + INSTRUCTIONS + " -clk=" + CLK + " -mem_range=" + MEM_RANGE + " -bench_path=" + BENCH_PATH + " -benchmark=" + BENCHMARK + " -bench_size=" + BENCH_SIZE + " -threads=" + THREADS + " -l1_inst_size=" + L1_INST_SIZE + " -l1_dat_size=" + L1_DAT_SIZE + " -l1_assoc=" + L1_ASSOC + " -l1_tag_lat=" + L1_TAG_LAT + " -l1_dat_lat=" + L1_DAT_LAT + " -l1_resp_lat=" + L1_RESP_LAT + " -l2_size=" + L2_SIZE + " -l2_assoc=" + L2_ASSOC + " -l2_tag_lat=" + L2_TAG_LAT + " -l2_dat_lat=" + L2_DAT_LAT + " -l2_resp_lat=" + L2_RESP_LAT
     os.system(comando)
 
 
@@ -649,5 +650,5 @@ etiquetaMostrarInfo = Label(root, text="Informacion de la configuracion:").place
 botonMostrarInfo = Button(root, text="Mostrar informacion", command=table).place(x=250, y=150)
 botonRun = Button(root, text="Simular", command=simular).place(x=10, y=660)
 table()
-execute_result_interface()
+# execute_result_interface()
 root.mainloop()
