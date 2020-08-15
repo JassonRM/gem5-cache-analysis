@@ -22,11 +22,11 @@ MEM_RANGE = "512MB"
 BENCH_PATH = "/home/marco/Documents/Projects/gem5-analysis-with-parsec/benchmarks"
 GEM_PATH = "/home/marco/Documents/Projects/gem5"
 PY_PATH = "/home/marco/Documents/Projects/gem5-analysis-with-parsec/processor.py"
-BENCHMARK = "canneal"
-BENCH_SIZE = "test"
+BENCHMARK = "bzip2"
+BENCH_SIZE = "simsmall"
 THREADS = "1"
 PROCESSORS = "6"
-INSTRUCTIONS = "100000"
+INSTRUCTIONS = "10000000"
 # ----------------------------------------------------------
 # -------------Configuraciones Caches-----------------------
 L1_INST_SIZE = "16kB"
@@ -35,7 +35,7 @@ L1_ASSOC = "2"
 L1_TAG_LAT = "2"
 L1_DAT_LAT = "2"
 L1_RESP_LAT = "2"
-L1_REPL_POL = "FIFORP"
+L1_REPL_POL = "LRURP"
 L1_PREFETCH = "NULL"
 # ----------------------------------------------------------
 L2_SIZE = "256kB"
@@ -43,16 +43,15 @@ L2_ASSOC = "8"
 L2_TAG_LAT = "20"
 L2_DAT_LAT = "20"
 L2_RESP_LAT = "20"
-L2_REPL_POL = "FIFORP"
+L2_REPL_POL = "LRURP"
 L2_PREFETCH = "NULL"
 
 # ----------------------------------------------------------
 BRANCH_PREDICTOR = "NULL"
-PREV_BRANCH_PREDICTOR = "NULL"
-BTB_ENTRIES = ""
-LOCAL_PREDICTOR_SIZE = ""
-GLOBAL_PREDICTOR_SIZE = ""
-CHOICE_PREDICTOR_SIZE = ""
+BTB_ENTRIES = "4096"
+LOCAL_PREDICTOR_SIZE = "1024"
+GLOBAL_PREDICTOR_SIZE = "8192"
+CHOICE_PREDICTOR_SIZE = "8192"
 
 
 # ----------------------------------------------------------
@@ -203,70 +202,6 @@ def setConfigurarcionL1(l1_inst_size, l1_dat_size, l1_assoc, l1_tag_latency, l1_
     L1_RESP_LAT = l1_resp_lat
     L1_REPL_POL = l1_repl_pol
     L1_PREFETCH = l1_prefetch
-    #
-    # if (l1_repl_pol == "BaseReplacementRP"):
-    #     L1_REPL_POL = "1"
-    # elif (l1_repl_pol == "FIFORP"):
-    #     L1_REPL_POL = "2"
-    # elif (l1_repl_pol == "SecondChanceRP"):
-    #     L1_REPL_POL = "3"
-    # elif (l1_repl_pol == "LFURP"):
-    #     L1_REPL_POL = "4"
-    # elif (l1_repl_pol == "LRURP"):
-    #     L1_REPL_POL = "5"
-    # elif (l1_repl_pol == "BIPRP"):
-    #     L1_REPL_POL = "6"
-    # elif (l1_repl_pol == "LIPRP"):
-    #     L1_REPL_POL = "7"
-    # elif (l1_repl_pol == "MRURP"):
-    #     L1_REPL_POL = "8"
-    # elif (l1_repl_pol == "RandomRP"):
-    #     L1_REPL_POL = "9"
-    # elif (l1_repl_pol == "BRRIPRP"):
-    #     L1_REPL_POL = "10"
-    # elif (l1_repl_pol == "RRIPRP"):
-    #     L1_REPL_POL = "11"
-    # elif (l1_repl_pol == "NRURP"):
-    #     L1_REPL_POL = "12"
-    # elif (l1_repl_pol == "TreePLRURP"):
-    #     L1_REPL_POL = "13"
-    # else:
-    #     L1_REPL_POL = "14"
-    #
-    # if (l1_prefetch == "BasePrefetcher"):
-    #     L1_PREFETCH = "1"
-    # elif (l1_prefetch == "MultiPrefetcher"):
-    #     L1_PREFETCH = "2"
-    # elif (l1_prefetch == "QueuedPrefetcher"):
-    #     L1_PREFETCH = "3"
-    # elif (l1_prefetch == "StridePrefetcher"):
-    #     L1_PREFETCH = "4"
-    # elif (l1_prefetch == "TaggedPrefethcer"):
-    #     L1_PREFETCH = "5"
-    # elif (l1_prefetch == "IndirectMemoryPrefetcher"):
-    #     L1_PREFETCH = "6"
-    # elif (l1_prefetch == "SignaturePathPrefetcher"):
-    #     L1_PREFETCH = "7"
-    # elif (l1_prefetch == "SignaturePathPrefetcherV2"):
-    #     L1_PREFETCH = "8"
-    # elif (l1_prefetch == "AMPMPrefetcher"):
-    #     L1_PREFETCH = "9"
-    # elif (l1_prefetch == "DCPTPrefetcher"):
-    #     L1_PREFETCH = "10"
-    # elif (l1_prefetch == "DCPTPrefetcher"):
-    #     L1_PREFETCH = "11"
-    # elif (l1_prefetch == "IrregularStreamBufferPrefetcher"):
-    #     L1_PREFETCH = "12"
-    # elif (l1_prefetch == "SlimAMPMPrefetcher"):
-    #     L1_PREFETCH = "13"
-    # elif (l1_prefetch == "BOPPrefetcher"):
-    #     L1_PREFETCH = "14"
-    # elif (l1_prefetch == "SBOOEprefetcher"):
-    #     L1_PREFETCH = "15"
-    # elif (l1_prefetch == "STeMSPrefetcher"):
-    #     L1_PREFETCH = "16"
-    # else:
-    #     L1_PREFETCH = "17"
 
     print("L1_INST_SIZE " + L1_INST_SIZE)
     print("L1_DAT_SIZE " + L1_DAT_SIZE)
@@ -345,71 +280,8 @@ def setConfigurarcionL2(l2_size, l2_assoc, l2_tag_latency, l2_data_latency, l2_r
     L2_REPL_POL = l2_repl_pol
     L2_PREFETCH = l2_prefetch
 
-    # if (l2_repl_pol == "BaseReplacementRP"):
-    #     L2_REPL_POL = "1"
-    # elif (l2_repl_pol == "FIFORP"):
-    #     L2_REPL_POL = "2"
-    # elif (l2_repl_pol == "SecondChanceRP"):
-    #     L2_REPL_POL = "3"
-    # elif (l2_repl_pol == "LFURP"):
-    #     L2_REPL_POL = "4"
-    # elif (l2_repl_pol == "LRURP"):
-    #     L2_REPL_POL = "5"
-    # elif (l2_repl_pol == "BIPRP"):
-    #     L2_REPL_POL = "6"
-    # elif (l2_repl_pol == "LIPRP"):
-    #     L2_REPL_POL = "7"
-    # elif (l2_repl_pol == "MRURP"):
-    #     L2_REPL_POL = "8"
-    # elif (l2_repl_pol == "RandomRP"):
-    #     L2_REPL_POL = "9"
-    # elif (l2_repl_pol == "BRRIPRP"):
-    #     L2_REPL_POL = "10"
-    # elif (l2_repl_pol == "RRIPRP"):
-    #     L2_REPL_POL = "11"
-    # elif (l2_repl_pol == "NRURP"):
-    #     L2_REPL_POL = "12"
-    # elif (l2_repl_pol == "TreePLRURP"):
-    #     L2_REPL_POL = "13"
-    # else:
-    #     L2_REPL_POL = "14"
-    #
-    # if (l2_prefetch == "BasePrefetcher"):
-    #     L2_PREFETCH = "1"
-    # elif (l2_prefetch == "MultiPrefetcher"):
-    #     L2_PREFETCH = "2"
-    # elif (l2_prefetch == "QueuedPrefetcher"):
-    #     L2_PREFETCH = "3"
-    # elif (l2_prefetch == "StridePrefetcher"):
-    #     L2_PREFETCH = "4"
-    # elif (l2_prefetch == "TaggedPrefethcer"):
-    #     L2_PREFETCH = "5"
-    # elif (l2_prefetch == "IndirectMemoryPrefetcher"):
-    #     L2_PREFETCH = "6"
-    # elif (l2_prefetch == "SignaturePathPrefetcher"):
-    #     L2_PREFETCH = "7"
-    # elif (l2_prefetch == "SignaturePathPrefetcherV2"):
-    #     L2_PREFETCH = "8"
-    # elif (l2_prefetch == "AMPMPrefetcher"):
-    #     L2_PREFETCH = "9"
-    # elif (l2_prefetch == "DCPTPrefetcher"):
-    #     L2_PREFETCH = "10"
-    # elif (l2_prefetch == "DCPTPrefetcher"):
-    #     L2_PREFETCH = "11"
-    # elif (l2_prefetch == "IrregularStreamBufferPrefetcher"):
-    #     L2_PREFETCH = "12"
-    # elif (l2_prefetch == "SlimAMPMPrefetcher"):
-    #     L2_PREFETCH = "13"
-    # elif (l2_prefetch == "BOPPrefetcher"):
-    #     L2_PREFETCH = "14"
-    # elif (l2_prefetch == "SBOOEprefetcher"):
-    #     L2_PREFETCH = "15"
-    # elif (l2_prefetch == "STeMSPrefetcher"):
-    #     L2_PREFETCH = "16"
-    # else:
-    #     L2_PREFETCH = "17"
-
     print("L2_SIZE " + L2_SIZE)
+
     print("L2_ASSOC " + L2_ASSOC)
     print("L2_TAG_LAT " + L2_TAG_LAT)
     print("L2_DAT_LAT " + L2_DAT_LAT)
@@ -419,8 +291,7 @@ def setConfigurarcionL2(l2_size, l2_assoc, l2_tag_latency, l2_data_latency, l2_r
     table()
     ventanaCacheL2.destroy()
 
-
-ventanaCacheL2 = None
+    ventanaCacheL2 = None
 
 
 def configuracionCacheL2():
@@ -470,15 +341,15 @@ def configuracionCacheL2():
 
 
 def setBranchPredictor(tipo, btbentries, localPsize, globalPsize, choicePsize):
-    global BRANCH_PREDICTOR, PREV_BRANCH_PREDICTOR, BTB_ENTRIES, LOCAL_PREDICTOR_SIZE, GLOBAL_PREDICTOR_SIZE, CHOICE_PREDICTOR_SIZE
+    global BRANCH_PREDICTOR, BTB_ENTRIES, LOCAL_PREDICTOR_SIZE, GLOBAL_PREDICTOR_SIZE, CHOICE_PREDICTOR_SIZE
 
     BRANCH_PREDICTOR = tipo
-    PREV_BRANCH_PREDICTOR = "NULL"
     BTB_ENTRIES = btbentries
     LOCAL_PREDICTOR_SIZE = localPsize
     GLOBAL_PREDICTOR_SIZE = globalPsize
     CHOICE_PREDICTOR_SIZE = choicePsize
 
+    editCPU()
     table()
     ventanBranchpredictor.destroy()
 
@@ -555,42 +426,70 @@ def simular():
     print(GEM_PATH)
     print(BENCH_PATH)
 
-    editCPU()
     print(INSTRUCTIONS)
     comando = GEM_PATH + "/build/X86/gem5.opt " + PY_PATH + " -I " + INSTRUCTIONS + " -clk=" + CLK + " -mem_range=" + MEM_RANGE + " -bench_path=" + BENCH_PATH + " -benchmark=" + BENCHMARK + " -bench_size=" + BENCH_SIZE + " -threads=" + THREADS + " -l1_inst_size=" + L1_INST_SIZE + " -l1_dat_size=" + L1_DAT_SIZE + " -l1_assoc=" + L1_ASSOC + " -l1_tag_lat=" + L1_TAG_LAT + " -l1_dat_lat=" + L1_DAT_LAT + " -l1_resp_lat=" + L1_RESP_LAT + " -l2_size=" + L2_SIZE + " -l2_assoc=" + L2_ASSOC + " -l2_tag_lat=" + L2_TAG_LAT + " -l2_dat_lat=" + L2_DAT_LAT + " -l2_resp_lat=" + L2_RESP_LAT
     os.system(comando)
 
 
 def table():
-    etiqueta = Label(root, text="CLK:          " + CLK).place(x=10, y=190)
-    etiqueta = Label(root, text="MEM_RANGE:    " + MEM_RANGE).place(x=10, y=210)
-    etiqueta = Label(root, text="BENCH_PATH:   " + BENCH_PATH).place(x=10, y=230)
-    etiqueta = Label(root, text="GEM_PATH:     " + GEM_PATH).place(x=10, y=250)
-    etiqueta = Label(root, text="PY_PATH:      " + PY_PATH).place(x=10, y=270)
-    etiqueta = Label(root, text="BENCHMARK:    " + BENCHMARK).place(x=10, y=290)
-    etiqueta = Label(root, text="BENCH_SIZE:   " + BENCH_SIZE).place(x=10, y=310)
-    etiqueta = Label(root, text="PROCESSORS:   " + PROCESSORS).place(x=10, y=330)
-    etiqueta = Label(root, text="INSTRUCTIONS  " + INSTRUCTIONS).place(x=10, y=350)  # a partir de aca cambiar y
-    etiqueta = Label(root, text="L1_INST_SIZE: " + L1_INST_SIZE).place(x=10, y=350)
-    etiqueta = Label(root, text="L1_DAT_SIZE:  " + L1_DAT_SIZE).place(x=10, y=370)
-    etiqueta = Label(root, text="L1_ASSOC:     " + L1_ASSOC).place(x=10, y=390)
-    etiqueta = Label(root, text="L1_TAG_LAT:   " + L1_TAG_LAT).place(x=10, y=410)
-    etiqueta = Label(root, text="L1_DAT_LAT:   " + L1_DAT_LAT).place(x=10, y=430)
-    etiqueta = Label(root, text="L1_REPL_POL:  " + L1_REPL_POL).place(x=10, y=450)
-    etiqueta = Label(root, text="L1_PREFETCH:  " + L1_PREFETCH).place(x=10, y=470)
-    etiqueta = Label(root, text="L2_SIZE:      " + L2_SIZE).place(x=10, y=490)
-    etiqueta = Label(root, text="L2_ASSOC:     " + L2_ASSOC).place(x=10, y=510)
-    etiqueta = Label(root, text="L2_TAG_LAT:   " + L2_TAG_LAT).place(x=10, y=530)
-    etiqueta = Label(root, text="L2_DAT_LAT:   " + L2_DAT_LAT).place(x=10, y=550)
-    etiqueta = Label(root, text="L2_RESP_LAT:  " + L2_RESP_LAT).place(x=10, y=570)
-    etiqueta = Label(root, text="L2_REPL_POL:  " + L2_REPL_POL).place(x=10, y=590)
-    etiqueta = Label(root, text="L2_PREFETCH:  " + L2_PREFETCH).place(x=10, y=610)
-    etiqueta = Label(root, text="BRANCH_PREDICTOR:" + BRANCH_PREDICTOR).place(x=10, y=630)
+    Label(root, borderwidth=2, relief='ridge').place(x=3, y=175, width=693, height=500)
+    Label(root, text="CLK:", anchor="w", width=18).place(x=10, y=190)
+    Label(root, text="MEM_RANGE:", anchor="w", width=18).place(x=10, y=210)
+    Label(root, text="BENCH_PATH:", anchor="w", width=18).place(x=10, y=230)
+    Label(root, text="GEM_PATH:", anchor="w", width=18).place(x=10, y=250)
+    Label(root, text="PY_PATH:", anchor="w", width=18).place(x=10, y=270)
+    Label(root, text="BENCHMARK:", anchor="w", width=18).place(x=10, y=290)
+    Label(root, text="BENCH_SIZE:", anchor="w", width=18).place(x=10, y=310)
+    Label(root, text="THREADS:", anchor="w", width=18).place(x=10, y=330)
+    Label(root, text="INSTRUCTIONS:", anchor="w", width=18).place(x=10, y=350)  # a partir de aca cambiar y
+    Label(root, text="L1_INST_SIZE:", anchor="w", width=18).place(x=10, y=370)
+    Label(root, text="L1_DAT_SIZE:", anchor="w", width=18).place(x=10, y=390)
+    Label(root, text="L1_ASSOC:", anchor="w", width=18).place(x=10, y=410)
+    Label(root, text="L1_TAG_LAT:", anchor="w", width=18).place(x=10, y=430)
+    Label(root, text="L1_DAT_LAT:", anchor="w", width=18).place(x=10, y=450)
+    Label(root, text="L1_REPL_POL:", anchor="w", width=18).place(x=10, y=470)
+    Label(root, text="L1_PREFETCH:", anchor="w", width=18).place(x=10, y=490)
+    Label(root, text="L2_SIZE:", anchor="w", width=18).place(x=10, y=510)
+    Label(root, text="L2_ASSOC:", anchor="w", width=18).place(x=10, y=530)
+    Label(root, text="L2_TAG_LAT:", anchor="w", width=18).place(x=10, y=550)
+    Label(root, text="L2_DAT_LAT:", anchor="w", width=18).place(x=10, y=570)
+    Label(root, text="L2_RESP_LAT:", anchor="w", width=18).place(x=10, y=590)
+    Label(root, text="L2_REPL_POL:", anchor="w", width=18).place(x=10, y=610)
+    Label(root, text="L2_PREFETCH:", anchor="w", width=18).place(x=10, y=630)
+    Label(root, text="BRANCH_PREDICTOR:", anchor="w", width=18).place(x=10, y=650)
+
+    Label(root, text=CLK).place(x=160, y=190)
+    Label(root, text=MEM_RANGE).place(x=160, y=210)
+    Label(root, text=BENCH_PATH).place(x=160, y=230)
+    Label(root, text=GEM_PATH).place(x=160, y=250)
+    Label(root, text=PY_PATH).place(x=160, y=270)
+    Label(root, text=BENCHMARK).place(x=160, y=290)
+    Label(root, text=BENCH_SIZE).place(x=160, y=310)
+    Label(root, text=THREADS).place(x=160, y=330)
+    Label(root, text=INSTRUCTIONS).place(x=160, y=350)  # a partir de aca cambiar y
+    Label(root, text=L1_INST_SIZE).place(x=160, y=370)
+    Label(root, text=L1_DAT_SIZE).place(x=160, y=390)
+    Label(root, text=L1_ASSOC).place(x=160, y=410)
+    Label(root, text=L1_TAG_LAT).place(x=160, y=430)
+    Label(root, text=L1_DAT_LAT).place(x=160, y=450)
+    Label(root, text=L1_REPL_POL).place(x=160, y=470)
+    Label(root, text=L1_PREFETCH).place(x=160, y=490)
+    Label(root, text=L2_SIZE).place(x=160, y=510)
+    Label(root, text=L2_ASSOC).place(x=160, y=530)
+    Label(root, text=L2_TAG_LAT).place(x=160, y=550)
+    Label(root, text=L2_DAT_LAT).place(x=160, y=570)
+    Label(root, text=L2_RESP_LAT).place(x=160, y=590)
+    Label(root, text=L2_REPL_POL).place(x=160, y=610)
+    Label(root, text=L2_PREFETCH).place(x=160, y=630)
+    Label(root, text=BRANCH_PREDICTOR).place(x=160, y=650)
 
 
 def editCaches():
     caches = open("../caches.py", "r+")
     data = caches.read()
+    caches.close()
+    open("../caches.py", "w").close()
+    caches = open("../caches.py", "r+")
     data = re.sub("L1_REPLACEMENT_POLICY = .+\n", "L1_REPLACEMENT_POLICY = " + L1_REPL_POL + "()\n", data)
     if L1_PREFETCH == "NULL":
         data = re.sub("L1_PREFETCHER = .+\n", "L1_PREFETCHER = " + L1_PREFETCH + "\n", data)
@@ -607,20 +506,42 @@ def editCaches():
 
 
 def editCPU():
-    global PREV_BRANCH_PREDICTOR
-    if BRANCH_PREDICTOR != PREV_BRANCH_PREDICTOR:
-        PREV_BRANCH_PREDICTOR = BRANCH_PREDICTOR
-    else:
-        return
-
     cpu = open(GEM_PATH + "/src/cpu/simple/BaseSimpleCPU.py", "r+")
     data = cpu.read()
+    cpu.close()
+    open(GEM_PATH + "/src/cpu/simple/BaseSimpleCPU.py", "w").close()
+    cpu = open(GEM_PATH + "/src/cpu/simple/BaseSimpleCPU.py", "r+")
     if BRANCH_PREDICTOR != "NULL":
         data = re.sub("Param.BranchPredictor(.+, \"Branch Predictor\").*",
                       "Param.BranchPredictor(" + BRANCH_PREDICTOR + "(), \"Branch Predictor\")", data)
     else:
         data = re.sub("Param.BranchPredictor(.+, \"Branch Predictor\").*",
                       "Param.BranchPredictor(" + BRANCH_PREDICTOR + ", \"Branch Predictor\")", data)
+    cpu.seek(0)
+    cpu.write(data)
+    cpu.close()
+
+    cpu = open(GEM_PATH + "/src/cpu/pred/BranchPredictor.py", "r+")
+    data = cpu.read()
+    cpu.close()
+    open(GEM_PATH + "/src/cpu/pred/BranchPredictor.py", "w").close()
+    cpu = open(GEM_PATH + "/src/cpu/pred/BranchPredictor.py", "r+")
+
+    data = re.sub("BTBEntries = .+\n", "BTBEntries = Param.Unsigned(" + BTB_ENTRIES + ", \"Number of BTB entries\")\n",
+                  data)
+
+    data = re.sub("localPredictorSize = .+\n",
+                  "localPredictorSize = Param.Unsigned(" + LOCAL_PREDICTOR_SIZE + ", \"Size of local predictor)\")\n",
+                  data)
+
+    data = re.sub("globalPredictorSize = .+\n",
+                  "globalPredictorSize = Param.Unsigned(" + GLOBAL_PREDICTOR_SIZE + ", \"Size of global predictor)\")\n",
+                  data)
+
+    data = re.sub("choicePredictorSize = .+\n",
+                  "choicePredictorSize = Param.Unsigned(" + CHOICE_PREDICTOR_SIZE + ", \"Size of choice predictor)\")\n",
+                  data)
+
     cpu.seek(0)
     cpu.write(data)
     cpu.close()
@@ -637,18 +558,22 @@ def execute_result_interface():
 # Configuracion general para la ventana principal.
 root = Tk()
 root.title("Herramienta de configuracion para el Simulador gem5")
-root.geometry("700x700")
-etiquetaConfiguracionGeneral = Label(root, text="Configuraciones generales del sistema.").place(x=10, y=10)
+root.geometry("700x730")
+root.resizable(False, False)
+etiqueta = Label(root, borderwidth=2, relief='solid').place(x=-10, y=3, width=900, height=135)
+etiquetaConfiguracionGeneral = Label(root, text="Configuraciones generales del sistema.").place(x=25, y=10)
 botonConfiguracionGeneral = Button(root, text="Configuracion General", command=ventanaConfiguracionesGenrales).place(
-    x=25, y=50)
-botonBranchPredictor = Button(root, text="Configuracion BranchPredictor", command=branchPredictor).place(x=25, y=90)
+    x=40, y=50, width=225)
+botonBranchPredictor = Button(root, text="Configuracion BranchPredictor", command=branchPredictor).place(x=40, y=90,
+                                                                                                         width=225)
 etiquetaDecodificarImagen = Label(root, text="Configuraciones para las cache L1 y L2").place(x=400, y=10)
-# etiquetaDecodificarImagen = Label(root, text=CLK).place(x=400, y=10)
-botonL1 = Button(root, text="Configuracion de Cache L1", command=configuracionCacheL1).place(x=400, y=50)
-botonL2 = Button(root, text="Configuracion de Cache L2", command=configuracionCacheL2).place(x=400, y=90)
-etiquetaMostrarInfo = Label(root, text="Informacion de la configuracion:").place(x=10, y=150)
-botonMostrarInfo = Button(root, text="Mostrar informacion", command=table).place(x=250, y=150)
-botonRun = Button(root, text="Simular", command=simular).place(x=10, y=660)
+botonL1 = Button(root, text="Configuracion de Cache L1", command=configuracionCacheL1).place(x=430, y=50)
+botonL2 = Button(root, text="Configuracion de Cache L2", command=configuracionCacheL2).place(x=430, y=90)
+etiquetaMostrarInfo = Label(root, text="Informacion de la configuracion:").place(x=40, y=150)
+botonMostrarInfo = Button(root, text="Actualizar", command=table).place(x=480, y=142
+                                                                        )
+botonRun = Button(root, text="Simular", command=simular).place(x=40, y=685)
+botonresultados = Button(root, text="Resultados", command=execute_result_interface).place(x=530, y=685)
+
 table()
-# execute_result_interface()
 root.mainloop()

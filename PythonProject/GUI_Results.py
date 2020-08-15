@@ -314,6 +314,3 @@ def init_interface():
     except Exception as e:
         tk.messagebox.showerror("Error, could not find file", "Please check the configuration file")
         print(e)
-
-
-init_interface()
