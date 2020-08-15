@@ -15,7 +15,7 @@ system.cpu.Branches                             62531                       # Nu
 system.cpu.committedInsts                      289024                       # Number of instructions committed
 system.cpu.committedOps                        536735                       # Number of ops (including micro ops) committed
 system.cpu.dtb.rdAccesses                       69965                       # TLB accesses on read requests
-system.cpu.dtb.rdMisses                           290                       # TLB misses on read requests
+system.cpu.dtb.rdMisses                           90                       # TLB misses on read requests
 system.cpu.dtb.wrAccesses                       27538                       # TLB accesses on write requests
 system.cpu.dtb.wrMisses                            51                       # TLB misses on write requests
 system.cpu.idle_fraction                     0.000000                       # Percentage of idle cycles
@@ -43,7 +43,7 @@ system.cpu.num_int_register_reads             1027012                       # nu
 system.cpu.num_int_register_writes             437572                       # number of times the integer registers were written
 system.cpu.num_load_insts                       69932                       # Number of load instructions
 system.cpu.num_mem_refs                         97468                       # number of memory refs
-system.cpu.num_store_insts                      27536                       # Number of store instructions
+system.cpu.num_store_insts                      9000                       # Number of store instructions
 system.cpu.num_vec_alu_accesses                     0                       # Number of vector alu accesses
 system.cpu.num_vec_insts                            0                       # number of vector instructions
 system.cpu.num_vec_register_reads                   0                       # number of times the vector registers were read

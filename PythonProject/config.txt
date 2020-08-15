@@ -1,5 +1,5 @@
 C:\Users\kenne\OneDrive\Desktop\Proyecto Final ARqui\gem5-analysis-with-parsec\PythonProject\ConfigManadgement\TestFiles\stats.txt%C:\Users\kenne\OneDrive\Desktop\Proyecto Final ARqui\gem5-analysis-with-parsec\PythonProject\ConfigManadgement\TestFiles\stats2.txt%C:\Users\kenne\OneDrive\Desktop\Proyecto Final ARqui\gem5-analysis-with-parsec\PythonProject\ConfigManadgement\TestFiles\stats3.txt
-param1%param3%param2
-122%125%126
+clock%Branches%system.cpu.dtb.rdMisses%system.cpu.num_load_insts%system.cpu.num_store_insts%
+122%125%126%2%2
 C1%C2%C3
 

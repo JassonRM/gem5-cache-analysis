@@ -15,7 +15,7 @@ system.cpu.Branches                             62531                       # Nu
 system.cpu.committedInsts                      289024                       # Number of instructions committed
 system.cpu.committedOps                        536735                       # Number of ops (including micro ops) committed
 system.cpu.dtb.rdAccesses                       69965                       # TLB accesses on read requests
-system.cpu.dtb.rdMisses                           290                       # TLB misses on read requests
+system.cpu.dtb.rdMisses                           909                       # TLB misses on read requests
 system.cpu.dtb.wrAccesses                       27538                       # TLB accesses on write requests
 system.cpu.dtb.wrMisses                            51                       # TLB misses on write requests
 system.cpu.idle_fraction                     0.000000                       # Percentage of idle cycles

@@ -30,6 +30,27 @@ def parse_document(filename):
     return [directions, params, lines_num, benchmarks_names]
 
 
+def get_value_result_param(param, doc_list):
+    length = len(doc_list)
+    to_return = []
+    i = 0
+    while i != length:
+        direction = doc_list[i]
+        direction = direction.replace("\n", "")
+        file = open(direction, 'r')
+        line_read = file.readlines()
+        value = 0
+        for lines in line_read:
+            if param in lines:
+                value = parse_value_line(lines)
+                print(value)
+                print(param)
+        file.close()
+        to_return.append(value)
+        i += 1
+    return to_return
+
+
 def get_value_result(line, doc_list):
     length = len(doc_list)
     to_return = []
@@ -65,10 +86,10 @@ def parse_value_line(line):
         i += 1
 
 
-def get_all_results(doc_list, lines):
+def get_all_results(doc_list, params):
     list_to_return = []
-    for num_line in lines:
-        list_to_return.append(get_value_result(num_line, doc_list))
+    for parameters in params:
+        list_to_return.append(get_value_result_param(parameters, doc_list))
     return list_to_return
 
 
@@ -161,19 +182,23 @@ class DataToGui:
         return None
 
 
-
-
 def config_graph_holder():
     global graph_holder
 
     param_lists = parse_document("config.txt")
-    graph_holder.set_benchmarks_names(param_lists[3])
-    graph_holder.set_benchmarks_param(param_lists[1])
-    graph_holder.set_benchmarks_parameters_lines(param_lists[2])
-    graph_holder.set_benchmarks_parameters_values(get_all_results(param_lists[0], param_lists[2]))
+    graph_holder.set_benchmarks_names(parse_list(param_lists[3]))
+    graph_holder.set_benchmarks_param(parse_list(param_lists[1]))
+    graph_holder.set_benchmarks_parameters_lines(parse_list(param_lists[2]))
+    graph_holder.set_benchmarks_parameters_values(get_all_results(parse_list(param_lists[0]),parse_list( param_lists[1])))
     if graph_holder.guiRoot is not None:
         graph_holder.init_graphics()
 
+def parse_list(list):
+    if None in list:
+        list.remove(None)
+    if "\n" in list:
+        list.remove("\n")
+    return list
 
 def print_gui_data():
     global graph_holder
@@ -209,7 +234,6 @@ def callback(*args):
         canvas_actual1.place(x=10, y=130)
 
 
-
 ##############################______________________________________________________________________________________
 
 canvas_actual2 = None
@@ -232,7 +256,7 @@ def callback2(*args):
         canvas_actual2.place(x=650, y=130)
 
 
-#_______________________________________________________________________________________________________
+# _______________________________________________________________________________________________________
 canvas_actual3 = None
 canvas_prev3 = None
 
@@ -253,41 +277,42 @@ def callback3(*args):
         canvas_actual3.place(x=1300, y=130)
 
 
-
 def init_interface():
-    global graph_holder
-    global root
-    global variable3
-    global variable
-    global variable2
-    graph_holder = None
-    graph_holder = DataToGui()
-    root = tk.Tk()
-    root.geometry("1920x1080")
-    canvas = Canvas(root, height=1080, width=1920, bg="white")
-    canvas.place(x=0, y=-5)
-    graph_holder.set_gui_root(canvas)
-    config_graph_holder()
-    variable = tk.StringVar(canvas)
-    variable.set("")
-    opt = tk.OptionMenu(canvas, variable, *graph_holder.benchMarksParameters)
-    opt.config(width=20, font=('Helvetica', 10))
-    opt.place(x=10, y=100)
-    variable.trace("w", callback)
-    variable2 = tk.StringVar(canvas)
-    variable2.set("")
-    opt2 = tk.OptionMenu(canvas, variable2, *graph_holder.benchMarksParameters)
-    opt2.config(width=20, font=('Helvetica', 10))
-    opt2.place(x=650, y=100)
-    variable2.trace("w", callback2)
-    variable3 = tk.StringVar(canvas)
-    variable3.set("")
-    opt3 = tk.OptionMenu(canvas, variable3, *graph_holder.benchMarksParameters)
-    opt3.config(width=20, font=('Helvetica', 10))
-    opt3.place(x=1300, y=100)
-    variable3.trace("w", callback3)
-    root.mainloop()
+    try:
+        global graph_holder
+        global root
+        global variable3
+        global variable
+        global variable2
+        graph_holder = None
+        graph_holder = DataToGui()
+        root = tk.Tk()
+        root.geometry("1920x1080")
+        canvas = Canvas(root, height=1080, width=1920, bg="white")
+        canvas.place(x=0, y=-5)
+        graph_holder.set_gui_root(canvas)
+        config_graph_holder()
+        variable = tk.StringVar(canvas)
+        variable.set("")
+        opt = tk.OptionMenu(canvas, variable, *graph_holder.benchMarksParameters)
+        opt.config(width=20, font=('Helvetica', 10))
+        opt.place(x=10, y=100)
+        variable.trace("w", callback)
+        variable2 = tk.StringVar(canvas)
+        variable2.set("")
+        opt2 = tk.OptionMenu(canvas, variable2, *graph_holder.benchMarksParameters)
+        opt2.config(width=20, font=('Helvetica', 10))
+        opt2.place(x=650, y=100)
+        variable2.trace("w", callback2)
+        variable3 = tk.StringVar(canvas)
+        variable3.set("")
+        opt3 = tk.OptionMenu(canvas, variable3, *graph_holder.benchMarksParameters)
+        opt3.config(width=20, font=('Helvetica', 10))
+        opt3.place(x=1300, y=100)
+        variable3.trace("w", callback3)
+        root.mainloop()
+    except:
+        tk.messagebox.showerror("Error, could not find file", "Please check the configuration file")
 
 
-
-
+init_interface()
