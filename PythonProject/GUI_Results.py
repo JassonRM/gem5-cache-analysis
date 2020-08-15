@@ -315,4 +315,3 @@ def init_interface():
         tk.messagebox.showerror("Error, could not find file", "Please check the configuration file")
 
 
-init_interface()

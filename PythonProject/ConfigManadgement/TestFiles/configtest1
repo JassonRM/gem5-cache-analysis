@@ -1,0 +1,5 @@
+\examplefiles\BiModeBP.txt%\examplefiles\BiModeBP.txt%\examplefiles\BiModeBP.txt
+clock%Branches%system.cpu.dtb.rdMisses%system.cpu.num_load_insts%system.cpu.num_store_insts%
+122%125%126%2%2
+C1%C2%C3
+
