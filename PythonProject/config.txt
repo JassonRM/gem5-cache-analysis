@@ -1,4 +1,4 @@
-examplefiles\BiModeBP.txt%examplefiles\LocalBP.txt%examplefiles\TournamentBP.txt
-BP lookups%Branches%predictedBranches%system.cpu.num_load_insts%system.cpu.num_store_insts%
+examplefiles\LRURP.txt%examplefiles\MRURP.txt%examplefiles\RRIPRP.txt%examplefiles\LIPRP.txt%examplefiles\LFURP.txt%
+overall_hits::total%overall_misses::total%overall_accesses::total%overall_miss_rate::total%
 122%125%126%2%2
-BB%LB%TB
+LR%MR%RR%LI%LF

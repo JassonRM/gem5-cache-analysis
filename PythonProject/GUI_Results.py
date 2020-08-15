@@ -311,7 +311,9 @@ def init_interface():
         opt3.place(x=1300, y=100)
         variable3.trace("w", callback3)
         root.mainloop()
-    except:
+    except Exception as e:
         tk.messagebox.showerror("Error, could not find file", "Please check the configuration file")
+        print(e)
 
 
+init_interface()
